@@ -156,7 +156,7 @@ App = {
         num_edge_entries: 1 // 两侧显示的首尾分页的条目数
     });
     if(tempList.length==0){
-        alert("没有找到该类型图书，请您换个搜索类型( ˶‾᷄࿀‾᷅˵ )");
+        alert("没有找到该类型图书");
     }
 },
 
@@ -200,7 +200,7 @@ App = {
             num_edge_entries: 1 // 两侧显示的首尾分页的条目数
         });
         if(tempList.length==0){
-            alert("没有找到该类型图书，请您换个搜索类型( ˶‾᷄࿀‾᷅˵ )");
+            alert("没有找到该类型图书");
         }
     },
 

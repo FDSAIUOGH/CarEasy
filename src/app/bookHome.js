@@ -25,53 +25,33 @@ App = {
     pageCallback: async function (index, jq) {
         $("#books").html('');
         var pageNum = 8;
-        var start = index * pageNum; // 开始
-        var end = Math.min((index + 1) * pageNum, totalBooksNum); // 结束
+        var start = index * pageNum;
+        var end = Math.min((index + 1) * pageNum, totalBooksNum);
+        
+        // 加载模板
+        const response = await fetch('library/templates/book-item.html');
+        const template = await response.text();
+        
         var content = '';
         for (var i = start; i < end; i++) {
             var result = await App._getBookInfo(i);
             var borrowNum = await App._getBorrowedNums(i);
-            content += '<div class="col-sm-6 col-md-3" >'
-                + '<div class="thumbnail">'
-                + '<a href="book.html?id=' + i + '">'
-                + '<div style="position: relative;">'
-                + '<img id="cover" class="img-cover" src="' + result[6] + '" alt="资讯封面"/>'
-                + '<figcaption id="nameWriter" class="img-caption">' + result[1] + '</figcaption>'
-                + '</div>'
-                + '</a>'
-                + '<div class="caption">'
-                + '<table class="dashed_tbl">'
-                +'<tr>'
-                +'<td>借阅量: <samp id="borrowNum">'+borrowNum+'</samp></td>'
-                +'<td>评分: <samp id="score">' + result[10] + '</samp></td>'
-                +'</tr>'
-                +'</table>'
-                + '<span class="label label-info">类型</span>'
-                + '<samp id="style">' + result[2] + '</samp>'
-                + '<br/>'
-                + '<span class="label label-info">出版社&出版时间</span>'
-                + '<samp id="publisherPublishAge">' + result[3] + '</samp>'
-                + '<br/>'
-                + '<span class="label label-info">书号</span>'
-                + '<samp id="ISBN">' + result[4] + '</samp>'
-                + '<br/>'
-                + '<span class="label label-info">页数</span>'
-                + '<samp id="pages">' + result[8] + '</samp>'
-                + '<br/>'
-                + '<span class="label label-info">在架状态</span>'
-                + '<samp id="status">' + result[7] + '</samp>'
-                + '<br/>'
-                + '<span class="label label-info">书籍简介</span>'
-                + '<samp id="intro">' + result[5].substr(0, 20) + '......</samp>'
-                + '<br/>'
-                + '<div align="center">'
-                + '<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modal"'
-                + 'onclick="App.set('+i+')">借阅'
-                + '</button>'
-                + '</div>'
-                + '</div>'
-                + '</div>'
-                + '</div>';
+            
+            // 替换模板中的占位符
+            var bookHtml = template
+                .replace('{nameWriter}', result[1])
+                .replace('{borrowNum}', borrowNum)
+                .replace('{score}', result[10])
+                .replace('{style}', result[2])
+                .replace('{publisherPublishAge}', result[3])
+                .replace('{ISBN}', result[4])
+                .replace('{pages}', result[8])
+                .replace('{status}', result[7])
+                .replace('{id}', i)
+                .replace('{cover}', result[6])
+                .replace('{intro}', result[5]);
+                
+            content += bookHtml;
         }
         $("#books").append(content);
     },
@@ -79,53 +59,33 @@ App = {
     pageCallSearchback: async function (index, jq) {
         $("#books").html('');
         var pageNum = 8;
-        var start = index * pageNum; // 开始
-        var end = Math.min((index + 1) * pageNum, totalBooksNum); // 结束
+        var start = index * pageNum;
+        var end = Math.min((index + 1) * pageNum, totalBooksNum);
+        
+        // 加载模板
+        const response = await fetch('library/templates/book-item.html');
+        const template = await response.text();
+        
         var content = '';
         for (var i = start; i < end; i++) {
             var result = searchList[i][1];
             var borrowNum = await App._getBorrowedNums(searchList[i][0]);
-            content += '<div class="col-sm-6 col-md-3" >'
-                + '<div class="thumbnail">'
-                + '<a href="book.html?id=' + searchList[i][0]+ '">'
-                + '<div style="position: relative;">'
-                + '<img id="cover" class="img-cover" src="' + result[6] + '" alt="资讯封面"/>'
-                + '<figcaption id="nameWriter" class="img-caption">' + result[1] + '</figcaption>'
-                + '</div>'
-                + '</a>'
-                + '<div class="caption">'
-                + '<table class="dashed_tbl">'
-                +'<tr>'
-                +'<td>借阅量: <samp id="borrowNum">'+borrowNum+'</samp></td>'
-                +'<td>评分: <samp id="score">' + result[10] + '</samp></td>'
-                +'</tr>'
-                +'</table>'
-                + '<span class="label label-info">类型</span>'
-                + '<samp id="style">' + result[2] + '</samp>'
-                + '<br/>'
-                + '<span class="label label-info">出版社&出版时间</span>'
-                + '<samp id="publisherPublishAge">' + result[3] + '</samp>'
-                + '<br/>'
-                + '<span class="label label-info">书号</span>'
-                + '<samp id="ISBN">' + result[4] + '</samp>'
-                + '<br/>'
-                + '<span class="label label-info">页数</span>'
-                + '<samp id="pages">' + result[8] + '</samp>'
-                + '<br/>'
-                + '<span class="label label-info">在架状态</span>'
-                + '<samp id="status">' + result[7] + '</samp>'
-                + '<br/>'
-                + '<span class="label label-info">书籍简介</span>'
-                + '<samp id="intro">' + result[5].substr(0, 20) + '......</samp>'
-                + '<br/>'
-                + '<div align="center">'
-                + '<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modal"'
-                + 'onclick="App.set('+ searchList[i][0] +')">借阅'
-                + '</button>'
-                + '</div>'
-                + '</div>'
-                + '</div>'
-                + '</div>';
+            
+            // 替换模板中的占位符
+            var bookHtml = template
+                .replace('{nameWriter}', result[1])
+                .replace('{borrowNum}', borrowNum)
+                .replace('{score}', result[10])
+                .replace('{style}', result[2])
+                .replace('{publisherPublishAge}', result[3])
+                .replace('{ISBN}', result[4])
+                .replace('{pages}', result[8])
+                .replace('{status}', result[7])
+                .replace('{id}', searchList[i][0])
+                .replace('{cover}', result[6])
+                .replace('{intro}', result[5]);
+                
+            content += bookHtml;
         }
         $("#books").append(content);
     },
@@ -158,7 +118,7 @@ App = {
             num_edge_entries: 1 // 两侧显示的首尾分页的条目数
         });
         if(newArray.length==0){
-            alert("没有找到该书籍信息，请您换个搜索关键词( ˶‾᷄࿀‾᷅˵ )");
+            alert("没有找到该书籍信息");
         }
     },
 
@@ -190,7 +150,7 @@ App = {
             num_edge_entries: 1 // 两侧显示的首尾分页的条目数
         });
         if(newArray.length==0){
-            alert("没有找到该书籍信息，请您换个搜索关键词( ˶‾᷄࿀‾᷅˵ )");
+            alert("没有找到该书籍信息");
         }
     },
 
