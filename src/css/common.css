@@ -13,10 +13,9 @@ body {
 
 #wrap {
     min-width: 100%;
-    position: absolute;
-    background: #eff3f6 bottom;
-    min-height: 100%;
-    overflow: hidden;
+    min-height: 100vh;
+    display: flex;
+    background: #eff3f6;
 }
 
 /*@media (min-width: 660px) #wrap {
@@ -36,11 +35,10 @@ body {
 }*/
 
 .leftMenu {
-    position: absolute;
-    box-sizing: border-box;
-    width: 200px;
-    height: 100%;
-    background: #4d5e70 bottom;
+    width: 20%;
+    background: #1a237e;
+    height: 100vh;
+    position: relative;
 }
 
 .leftMenu > div {
@@ -48,30 +46,20 @@ body {
 }
 
 #rightContent {
-    /*position: absolute;*/
-    box-sizing: border-box;
-    float: left;
-    box-sizing: border-box;
-    padding-left: 200px;
-    overflow-y: overlay;
-    overflow-x: hidden;
-    /*background-color: #eff3f6;*/
-    clear: both;
-    color: #717592;
-    min-width: 100%;
-    min-height: 500px;
+    flex: 1;
+    padding: 0 20px;
+    overflow-y: auto;
+    background-color: #eff3f6;
+    min-height: 100vh;
 }
 
 /*左侧菜单栏*/
 
 #logoDiv {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px;
     height: 70px;
-    background-color: #354457;
-    font-size: 17px;
+    background-color: rgba(0,0,0,0.2);
     color: #fff;
-    vertical-align: bottom;
 }
 
 #logo {
@@ -84,17 +72,16 @@ body {
 }
 
 #personInfor {
-    padding: 10px 5px 10px;
-    margin: 0 5px;
-    color: #b3bcc5;
-    border-bottom: 1px solid #354457;
+    padding: 15px 20px;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
     overflow-x: hidden;
     padding-left: 20px;
 }
 
 #personInfor p {
-    font-size: 12px;
-    margin-left: -5px;
+    margin: 5px 0;
+    font-size: 13px;
 }
 
 #personInfor a {
@@ -118,9 +105,8 @@ body {
 }
 
 .menu-title {
-    color: #828e9a;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    color: #b0bec5;
+    padding: 15px 20px;
     font-size: 14px;
     font-weight: bold;
 }
@@ -128,18 +114,25 @@ body {
 .menu-item {
     line-height: 40px;
     height: 40px;
-    color: #aab1b7;
+    color: #ffffff;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .menu-item a {
-    color: #aab1b7;
+    color: #ffffff;
     display: block;
+    padding: 0 20px;
 }
 
-.menu-item-active a {
-    color: #c4c7cc;
-    display: block;
+.menu-item:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.menu-item-active {
+    background-color: rgba(255,255,255,0.2);
+    border-right: 4px solid #ffffff;
+    color: #ffffff;
 }
 
 .menu-item img {
@@ -147,22 +140,37 @@ body {
     height: 20px;
 }
 
-.menu-item-active {
-    background-color: #3d4e60;
-    border-right: 4px solid #647f9d;
-    color: #fff;
+.menu-item-active a {
+    color: #c4c7cc;
+    display: block;
 }
 
 /*右侧具体内容栏目*/
 
 .check-div {
     height: 70px;
-    line-height: 70px;
-    *line-height: 60px;
-    background-color: #fff;
-    padding-left: 30px;
-    min-width: 824px !important;
-    box-sizing: border-box;
+    background-color: #ffffff;
+    padding: 0 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.check-div .left-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.check-div .right-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    max-width: 600px;
+    margin-left: 20px;
 }
 
 .check-div button {
@@ -171,15 +179,36 @@ body {
 }
 
 .check-div select {
-    height: 26px;
-    width: 120px !important;
-    display: inline;
-    color: #ccc;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    color: #424242;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.check-div select:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(25,118,210,0.2);
+    outline: none;
 }
 
 .check-div input {
-    width: 200px !important;
-    display: inline;
+    height: 36px;
+    padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    width: 240px !important;
+    margin: 0;
+}
+
+.check-div input:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(25,118,210,0.2);
+    outline: none;
 }
 
 .tab-pane {
@@ -266,7 +295,15 @@ body {
 }
 
 .btn {
-    border: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    padding: 8px 16px;
+}
+
+.btn-xs {
+    padding: 4px 12px;
+    font-size: 13px;
 }
 
 .toggle-btn {
@@ -317,27 +354,40 @@ select {
 }
 
 .btn-white {
-    background: #fff;
-    border: 1px solid #ccc !important;
-    font-weight: normal !important;
-    margin-right: 10px;
+    background: #ffffff;
+    color: #1976d2;
+    border: 1px solid #e0e0e0 !important;
+}
+
+.btn-white:hover {
+    background: #f5f5f5;
+    border-color: #1976d2 !important;
 }
 
 .btn-green {
-    border: 1px solid #ccc !important;
-    font-weight: normal !important;
-    margin-right: 10px;
-    color: #fff;
-    background: #529373;
+    background: #1976d2;
+    color: #ffffff;
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(25,118,210,0.3);
+}
+
+.btn-green:hover {
+    background: #1565c0;
+    box-shadow: 0 4px 8px rgba(25,118,210,0.4);
+    transform: translateY(-1px);
 }
 
 .btn-yellow {
-    background: #fff;
-    border: 1px solid #ccc !important;
-    font-weight: normal !important;
-    margin-right: 10px;
-    color: #eab67c !important;
-    border: 1px solid #eab67c !important;
+    background: #ffd54f;
+    color: #424242 !important;
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(255,213,79,0.3);
+}
+
+.btn-yellow:hover {
+    background: #ffca28;
+    box-shadow: 0 4px 8px rgba(255,213,79,0.4);
+    transform: translateY(-1px);
 }
 
 /*颜色*/
@@ -414,9 +464,14 @@ select {
 }
 
 .notice{
-    line-height:70px;
-    height:70px;
-    padding-left: 30px;
+    padding: 0 30px;
+    height: 70px;
+    line-height: 70px;
+    color: #424242;
+    font-size: 15px;
+    background: #ffffff;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
 /*.notice-img{*/
@@ -428,9 +483,14 @@ select {
     /*margin-left:7px;*/
 /*}*/
 .safe{
-    line-height:70px;
-    height:70px;
-    padding-left: 30px;
+    padding: 0 30px;
+    height: 70px;
+    line-height: 70px;
+    color: #424242;
+    font-size: 15px;
+    background: #ffffff;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
 .email-img {
@@ -443,6 +503,187 @@ select {
     line-height:20px;
     height:20px;
     padding-left: 16px;
+}
+
+.btn-search {
+    background: #1976d2;
+    color: #ffffff;
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(25,118,210,0.3);
+    height: 36px;
+    line-height: 1;
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+}
+
+.btn-search:hover {
+    background: #1565c0;
+    box-shadow: 0 4px 8px rgba(25,118,210,0.4);
+    transform: translateY(-1px);
+    color: #ffffff;
+}
+
+/* 添加搜索区域容器样式 */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.search-container input {
+    flex: 1;
+    min-width: 300px;
+}
+
+.search-container select {
+    width: 160px;
+}
+
+/* 书籍列表项样式 */
+.book-item {
+    padding: 20px;
+    margin-bottom: 30px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.book-title {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #1a237e;
+}
+
+.book-info {
+    padding-right: 20px;
+}
+
+.book-details p {
+    margin: 8px 0;
+}
+
+.book-details .label {
+    margin-right: 8px;
+    min-width: 80px;
+    display: inline-block;
+    text-align: center;
+}
+
+.book-cover {
+    margin-bottom: 15px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.book-cover img {
+    width: 100%;
+    height: auto;
+    max-height: 280px;
+    object-fit: cover;
+}
+
+.book-intro {
+    padding: 10px;
+    background: rgba(0,0,0,0.02);
+    border-radius: 4px;
+}
+
+.intro-text {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #666;
+    margin: 8px 0;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+/* 表格样式优化 */
+.dashed_tbl {
+    margin-bottom: 15px;
+}
+
+.dashed_tbl td {
+    padding: 8px;
+}
+
+/* 按钮样式调整 */
+.book-item .btn {
+    margin-top: 15px;
+}
+
+/* 修改右侧封面和简介的样式 */
+.book-cover {
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.book-cover img {
+    width: 100%;
+    height: 320px; /* 固定高度 */
+    object-fit: cover;
+    display: block;
+}
+
+.book-intro {
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.intro-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+    margin: 10px 0;
+    max-height: 150px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* 美化左侧信息布局 */
+.book-info {
+    padding-right: 30px;
+}
+
+.book-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1a237e;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.book-details p {
+    margin: 12px 0;
+    display: flex;
+    align-items: center;
+}
+
+.book-details .label {
+    min-width: 100px;
+    margin-right: 12px;
+    padding: 5px 8px;
+}
+
+.dashed_tbl {
+    margin: 20px 0;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.dashed_tbl td {
+    padding: 12px;
+    font-size: 15px;
 }
 
 

@@ -8,7 +8,7 @@
     <meta name="keywords" content="区块链，图书馆">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
-    <title>不好笑图书馆</title>
+    <title>TJ图书馆</title>
     <link href="images/library.png" rel="shortcut icon">
     <link rel="stylesheet" type="text/css" href="css/common.css"/>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
@@ -62,47 +62,25 @@
         <div role="tabpanel" class="tab-pane">
             <!--顶部模块-->
             <div class="check-div">
-                <div class="col-xs-4">
+                <div class="left-section">
                     <a href="library/deployBook.html">
                         <button class="btn btn-green btn-xs">我要发布图书</button>
                     </a>
                 </div>
-                <div class="col-xs-3">
-                    <input type="text" class="form-control input-sm" placeholder="输入关键字搜索" id="home-keyword">
-                    <button class="btn btn-default btn-xs" id="searchBtn" style="background-color: #17d0ff"  onclick="homeSearch()">查 询</button>
-                </div>
-                <div class="col-xs-4" style="padding-right: 80px;text-align: right;">
-                    <div class="btn-group">
-                        <button class="btn btn-default btn-xs" data-toggle="dropdown" style="background-color: #17d0ff">类型<span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" id="list" onclick="handleClick">
-                            <li><a>马列邓</a></li>
-                            <li><a>哲学、宗教</a></li>
-                            <li><a>社会科学总论</a></li>
-                            <li><a>政治、法律</a></li>
-                            <li><a>军事</a></li>
-                            <li><a>文化、科学、教育、体育</a></li>
-                            <li><a>语言、文字</a></li>
-                            <li><a>文学</a></li>
-                            <li><a>艺术</a></li>
-                            <li><a>历史、地理</a></li>
-                            <li><a>自然科学总论</a></li>
-                            <li><a>数理科学</a></li>
-                            <li><a>天文学、地球科学</a></li>
-                            <li><a>生物科学</a></li>
-                            <li><a>医药、卫生</a></li>
-                            <li><a>农业科学</a></li>
-                            <li><a>工业技术</a></li>
-                            <li><a>交通运输</a></li>
-                            <li><a>航空、航天</a></li>
-                            <li><a>环境科学、安全科学</a></li>
-                            <li><a>综合性图书</a></li>
-                        </ul>
+                <div class="right-section">
+                    <div class="search-container">
+                        <select class="form-control input-sm">
+                            <option value="">全部类型</option>
+                            <option value="1">计算机</option>
+                            <!-- 其他选项... -->
+                        </select>
+                        <input type="text" class="form-control input-sm" placeholder="请输入关键字">
+                        <button class="btn btn-search">查询</button>
                     </div>
                 </div>
             </div>
 
-            <!--商品主页-->
+            <!--隐藏的模板元素-->
             <div class="data-div">
                 <div class="row" id="books">
                     <div class="col-sm-6 col-md-3" hidden><!--template-->
