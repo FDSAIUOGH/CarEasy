@@ -420,7 +420,7 @@ App = {
                 bookInstance.getBookInfo.call(id).then(function (result) {
                     resolve(result);
                 }).catch(function (err) {
-                    alert("内部错误: "+err);
+                    alert("���部错误: "+err);
                 });
             });
         });
@@ -459,6 +459,26 @@ $('#myBookSearchBtn').bind('keydown',function(event){
 
 $(function () {
     App.init();
-    // 激活导航
-    $("#myBook-menu").addClass("menu-item-active");
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const type = urlParams.get('type');
+    
+    switch(type) {
+        case 'lend':
+            App.getPublishedBooks();
+            $("#lendCar-menu").addClass("menu-item-active");
+            break;
+        case 'borrowing':
+            App.getBorrowedBooks();
+            $("#borrowingCar-menu").addClass("menu-item-active");
+            break;
+        case 'borrowed':
+            App.getReturnedBooks();
+            $("#borrowedCar-menu").addClass("menu-item-active");
+            break;
+        case 'commented':
+            App.getCommentedBooks();
+            $("#commentedCar-menu").addClass("menu-item-active");
+            break;
+    }
 });
