@@ -50,7 +50,5 @@ document.write("<!--左侧菜单栏-->\n" +
     "\n" +
     "    <footer style=\"position: absolute; bottom: 0; width: 100%; padding: 15px; background: rgba(0,0,0,0.2); color: #ffffff;\">\n" +
     "        <p style=\"margin: 0; text-align: center;\">&copy; 车易CarEasy 2024</p>\n" +
-    "        <span class='email-img'></span>\n" +
-    "        <p class='email'></p>\n" +
     "    </footer>\n" +
     "</div>\n")

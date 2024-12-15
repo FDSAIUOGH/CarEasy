@@ -1,0 +1,11 @@
+document.write('<script type="text/javascript">');
+document.write('(function() {');
+document.write('  var baseUrl = document.querySelector("base") ? "../" : "";');
+document.write('  var xhr = new XMLHttpRequest();');
+document.write('  xhr.open("GET", baseUrl + "library/head.html", false);');
+document.write('  xhr.send();');
+document.write('  if(xhr.status === 200) {');
+document.write('    document.write(xhr.responseText);');
+document.write('  }');
+document.write('})();');
+document.write('</script>'); 

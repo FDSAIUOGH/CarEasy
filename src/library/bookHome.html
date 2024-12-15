@@ -2,23 +2,9 @@
 <html lang="zh">
 <head>
     <base href="../">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="基于区块链的图书馆">
-    <meta name="keywords" content="区块链，图书馆">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="format-detection" content="telephone=no">
-    <title>TJ图书馆</title>
-    <link href="images/car.png" rel="shortcut icon">
-    <link rel="stylesheet" type="text/css" href="css/common.css"/>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="css/flat-ui.min.css"/>
+    <script type="text/javascript" src="js/loadHead.js"></script>
     <link rel="stylesheet" type="text/css" href="css/pagination.css"/>
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/pagination.js"></script>
-    <script type="text/javascript" src="app/web3.min.js"></script><!--core-->
-    <script type="text/javascript" src="app/truffle-contract.js"></script><!--core-->
 </head>
 
 <style type="text/css">
@@ -64,15 +50,25 @@
             <div class="check-div">
                 <div class="left-section">
                     <a href="library/deployBook.html">
-                        <button class="btn btn-green btn-xs">我要发布图书</button>
+                        <button class="btn btn-green btn-xs">我要出借车辆</button>
                     </a>
                 </div>
                 <div class="right-section">
                     <div class="search-container">
                         <select class="form-control input-sm">
                             <option value="">全部类型</option>
-                            <option value="1">计算机</option>
-                            <!-- 其他选项... -->
+                            <option value="1">小型车</option>
+                            <option value="2">轿车</option>
+                            <option value="3">跑车</option>
+                            <option value="4">休旅车</option>
+                            <option value="5">越野车</option>
+                            <option value="6">皮卡车</option>
+                            <option value="7">超级跑车</option>
+                            <option value="8">特种车辆</option>
+                            <option value="9">小型货车</option>
+                            <option value="10">大型货车</option>
+                            <option value="11">小型客车</option>
+                            <option value="12">大型客车</option>
                         </select>
                         <input type="text" class="form-control input-sm" placeholder="请输入关键字">
                         <button class="btn btn-search">查询</button>
@@ -87,38 +83,41 @@
                         <div class="thumbnail">
                             <a href="book.html?id=10086">
                                 <div style="position: relative;">
-                                    <img id="cover" class="img-cover" src="images/suanfa.jpg" alt="图书封面"/>
-                                    <figcaption id="nameWriter" class="img-caption">算法 & Kevin Wayne</figcaption>
+                                    <img id="cover" class="img-cover" src="images/DodgeCharger.jpg" alt="车辆图片"/>
+                                    <figcaption id="nameWriter" class="img-caption">道奇Charger</figcaption>
                                 </div>
                             </a>
                             <div class="caption">
                                 <table class="dashed_tbl">
                                     <tr>
-                                        <td>借阅量: <samp id="borrowNum">100</samp></td>
+                                        <td>出租次数: <samp id="borrowNum">100</samp></td>
                                         <td>评分: <samp id="score">100</samp></td>
                                     </tr>
                                 </table>
                                 <span class="label label-info">类型</span>
-                                <samp id="style">综合性图书</samp>
+                                <samp id="style">跑车</samp>
                                 <br/>
-                                <span class="label label-info">出版社&出版时间</span>
-                                <samp id="publisherPublishAge">人民邮电出版社&2018</samp>
+                                <span class="label label-info">车主</span>
+                                <samp id="publisherPublishAge">普里斯</samp>
                                 <br/>
-                                <span class="label label-info">书号</span>
-                                <samp id="ISBN">978-7-115-29380-0</samp>
+                                <span class="label label-info">车牌号</span>
+                                <samp id="ISBN">I412917</samp>
                                 <br/>
-                                <span class="label label-info">页数</span>
-                                <samp id="pages">636</samp>
+                                <span class="label label-info">购车年份</span>
+                                <samp id="pages">2020</samp>
                                 <br/>
-                                <span class="label label-info">在架状态</span>
-                                <samp id="status">在架</samp>
+                                <span class="label label-info">出租状态</span>
+                                <samp id="status">未出租</samp>
                                 <br/>
-                                <span class="label label-info">内容简介</span>
-                                <samp id="intro">介绍算法的红宝书</samp>
+                                <span class="label label-info">简介</span>
+                                <samp id="intro">
+                                    道奇Charger是一款经典的美国肌肉车，以其强大的动力和独特的设计而闻名。
+                                    它搭载了一台V8发动机，提供了令人印象深刻的加速性能和令人兴奋的驾驶体验。
+                                </samp>
                                 <br/>
                                 <div align="center">
                                     <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modal"
-                                            onclick="App.set(10086)">借阅
+                                            onclick="App.set(10086)">租 借
                                     </button>
                                 </div>
                             </div>
@@ -139,16 +138,16 @@
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                     aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="modalLabel">借阅</h4>
+                            <h4 class="modal-title" id="modalLabel">租 借</h4>
                         </div>
                         <div class="modal-body">
                             <div class="container-fluid">
-                                确定要借阅该图书？
+                                确定要租借该车辆？
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-xs btn-default" data-dismiss="modal">取 消</button>
-                            <button type="button" class="btn btn-xs btn-danger" onclick="App.borrowBooks()"id="borrowBookBtn">借阅</button>
+                            <button type="button" class="btn btn-xs btn-danger" onclick="App.borrowBooks()"id="borrowBookBtn">租 借</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->

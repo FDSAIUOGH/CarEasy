@@ -420,7 +420,7 @@ App = {
                 bookInstance.getBookInfo.call(id).then(function (result) {
                     resolve(result);
                 }).catch(function (err) {
-                    alert("���部错误: "+err);
+                    alert("内部错误: "+err);
                 });
             });
         });

@@ -118,7 +118,7 @@ App = {
             num_edge_entries: 1 // 两侧显示的首尾分页的条目数
         });
         if(newArray.length==0){
-            alert("没有找到该书籍信息");
+            alert("没有找到该车辆信息");
         }
     },
 
@@ -150,7 +150,7 @@ App = {
             num_edge_entries: 1 // 两侧显示的首尾分页的条目数
         });
         if(newArray.length==0){
-            alert("没有找到该书籍信息");
+            alert("没有找到该车辆信息");
         }
     },
 
@@ -162,28 +162,28 @@ App = {
         book.deployed().then(function (bookInstance) {
             bookInstance.isBookLeft.call(BorrowId).then(function (result) {
                 if (result) {
-                    $("#borrowBookBtn").html('已借阅');
+                    $("#borrowBookBtn").html('已出租');
                     $("#borrowBookBtn").attr("disabled", true);
-                    alert("已借阅");
+                    alert("已出租");
                     $("#modal").modal('hide');
                 } else {
                     bookInstance.isMyBook.call(BorrowId).then(function (ismybook) {
                         if(ismybook){
-                            $("#borrowBookBtn").html('借 阅');
+                            $("#borrowBookBtn").html('出 租');
                             $("#borrowBookBtn").attr("disabled", true);
-                            alert("自己的图书不可被借阅!");
+                            alert("不能租自己的车!");
                             $("#modal").modal('hide');
                         }else {
-                            $("#borrowBookBtn").html('借 阅');
+                            $("#borrowBookBtn").html('出 租');
                             $("#borrowBookBtn").attr("disabled", false);
                             bookInstance.borrowedBook(BorrowId, {
                                 from: web3.eth.accounts[0],
                             }).then(function (result) {
-                                alert("借阅成功,等待写入区块!");
+                                alert("出租成功,等待写入区块!");
                                 $("#modal").modal('hide');
                                 window.location.reload();
                             }).catch(function (err) {
-                                alert("借阅失败: " + err);
+                                alert("出租失败: " + err);
                                 $("#modal").modal('hide');
                                 window.location.reload();
                             });
