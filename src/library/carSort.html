@@ -8,53 +8,56 @@
 </head>
 
 <body>
-
 <div id="wrap">
-
     <!--左侧菜单栏-->
     <script type="text/javascript" src="js/nav.js"></script>
 
     <!--右侧内容栏-->
     <div id="rightContent">
-        <!--右侧内容栏-->
         <div role="tabpanel" class="tab-pane">
             <!--顶部模块-->
             <div class="check-div">
                 <div class="col-xs-4">
-                    <button class="btn btn-green btn-xs" id="borrowBtn" onclick="App.sortBookByBorrowNums()">出租榜</button>
-                    <button class="btn btn-green btn-xs" id="scoreBtn" onclick="App.sortBookByComments()">评分榜</button>
+                    <button class="btn btn-primary btn-xs" id="rentBtn" onclick="App.sortCarByRentNums()">
+                        <i class="fa fa-sort-amount-desc"></i> 租赁榜
+                    </button>
+                    <button class="btn btn-success btn-xs" id="scoreBtn" onclick="App.sortCarByComments()">
+                        <i class="fa fa-star"></i> 评分榜
+                    </button>
+                    <button class="btn btn-info btn-xs" id="dateBtn" onclick="App.sortCarByDate()">
+                        <i class="fa fa-calendar"></i> 最新发布
+                    </button>
                 </div>
             </div>
 
-            <!--默认背景-->
-            <div id="bg">
-                <a href="library/bookHome.html"><img src="images/bg.jpg" style="width: 100%;"></a>
-            </div>
-            <!--文章列表-->
+            <!--车辆列表-->
             <div class="data-div">
                 <div class="row tableHeader">
                     <div class="col-xs-1">排名</div>
                     <div class="col-xs-1">车辆名称</div>
-                    <div class="col-xs-3">发布者</div>
+                    <div class="col-xs-3">车主地址</div>
                     <div class="col-xs-1">发布日期</div>
                     <div class="col-xs-1">类型</div>
                     <div class="col-xs-2">车牌号</div>
-                    <div class="col-xs-1">出租次数</div>
+                    <div class="col-xs-1">租赁次数</div>
                     <div class="col-xs-1">评分</div>
                     <div class="col-xs-1">车辆图片</div>
                 </div>
                 <div class="tableBody" id="sortList">
-                    <div class="row"><!--template-->
+                    <!-- 列表模板 -->
+                    <div class="row" style="display: none;">
                         <div class="col-xs-1" id="rank">1</div>
                         <div class="col-xs-1" id="nameWriter">道奇Charger</div>
                         <div class="col-xs-3" id="owner">0x69ec11c61afc509aed0c9cc7f9c6bddbe738c60a</div>
-                        <div class="col-xs-1" id="date">2024-12-15</div>
+                        <div class="col-xs-1" id="date">2024-03-15</div>
                         <div class="col-xs-1" id="style">跑车</div>
-                        <div class="col-xs-2" id="ISBN">I412917</div>
-                        <div class="col-xs-1" id="borrowNum">100</div>
-                        <div class="col-xs-1" id="score">100</div>
+                        <div class="col-xs-2" id="carNumber">京A12345</div>
+                        <div class="col-xs-1" id="rentNum">100</div>
+                        <div class="col-xs-1" id="score">9.5</div>
                         <div class="col-xs-1">
-                            <a href="book.html?id=10086"><img id="cover" style="width: 50px;height: 50px;" src="images/DodgeCharger.jpg"/></a>
+                            <a href="car.html?id=1">
+                                <img id="cover" style="width: 50px;height: 50px;" src="images/default-car.jpg" alt="车辆图片"/>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -64,10 +67,9 @@
             <footer class="footer">
                 <div id="pagination"></div>
             </footer>
-        </div><!--右侧内容栏-->
-    </div><!--右侧内容栏-->
-
+        </div>
+    </div>
 </div>
-<script type="text/javascript" src="app/bookSort.js"></script>
+<script type="text/javascript" src="app/carSort.js"></script>
 </body>
 </html>

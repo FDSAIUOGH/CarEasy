@@ -10,41 +10,41 @@ document.write("<!--左侧菜单栏-->\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"menu-title\"><span class=\"glyphicon glyphicon-user\"></span>&nbsp;&nbsp;&nbsp;管理</div>\n" +
-    "    <div class=\"menu-item\" id=\"lendCar-menu\">\n" +
-    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/myBook.html?type=lend\">\n" +
-    "            <span class=\"glyphicon glyphicon-send\"></span>&nbsp;&nbsp;&nbsp;我出借的车\n" +
+    "    <div class=\"menu-item\" id=\"rentCar-menu\">\n" +
+    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/myCar.html?type=publish\">\n" +
+    "            <span class=\"glyphicon glyphicon-send\"></span>&nbsp;&nbsp;&nbsp;我发布的车\n" +
     "        </a>\n" +
     "    </div>\n" +
-    "    <div class=\"menu-item\" id=\"borrowingCar-menu\">\n" +
-    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/myBook.html?type=borrowing\">\n" +
-    "            <span class=\"glyphicon glyphicon-import\"></span>&nbsp;&nbsp;&nbsp;我在借的车\n" +
+    "    <div class=\"menu-item\" id=\"rentedCar-menu\">\n" +
+    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/myCar.html?type=rented\">\n" +
+    "            <span class=\"glyphicon glyphicon-import\"></span>&nbsp;&nbsp;&nbsp;我租赁的车\n" +
     "        </a>\n" +
     "    </div>\n" +
-    "    <div class=\"menu-item\" id=\"borrowedCar-menu\">\n" +
-    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/myBook.html?type=borrowed\">\n" +
-    "            <span class=\"glyphicon glyphicon-time\"></span>&nbsp;&nbsp;&nbsp;我借过的车\n" +
+    "    <div class=\"menu-item\" id=\"returnedCar-menu\">\n" +
+    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/myCar.html?type=returned\">\n" +
+    "            <span class=\"glyphicon glyphicon-time\"></span>&nbsp;&nbsp;&nbsp;已归还的车\n" +
     "        </a>\n" +
     "    </div>\n" +
     "    <div class=\"menu-item\" id=\"commentedCar-menu\">\n" +
-    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/myBook.html?type=commented\">\n" +
-    "            <span class=\"glyphicon glyphicon-comment\"></span>&nbsp;&nbsp;&nbsp;我评价的车\n" +
+    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/myCar.html?type=commented\">\n" +
+    "            <span class=\"glyphicon glyphicon-comment\"></span>&nbsp;&nbsp;&nbsp;已评价的车\n" +
     "        </a>\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"menu-title\"><span class=\"glyphicon glyphicon-home\"></span>&nbsp;&nbsp;&nbsp;车易</div>\n" +
     "    <div class=\"menu-item\" id=\"publishCar-menu\">\n" +
-    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/deployBook.html\">\n" +
-    "            <span class=\"glyphicon glyphicon-plus\"></span>&nbsp;&nbsp;&nbsp;出借汽车\n" +
+    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/deployCar.html\">\n" +
+    "            <span class=\"glyphicon glyphicon-plus\"></span>&nbsp;&nbsp;&nbsp;发布车辆\n" +
     "        </a>\n" +
     "    </div>\n" +
     "    <div class=\"menu-item\" id=\"carHome-menu\">\n" +
-    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/bookHome.html\">\n" +
-    "            <span class=\"glyphicon glyphicon-th-large\"></span>&nbsp;&nbsp;&nbsp;借车大厅\n" +
+    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/carHome.html\">\n" +
+    "            <span class=\"glyphicon glyphicon-th-large\"></span>&nbsp;&nbsp;&nbsp;租车大厅\n" +
     "        </a>\n" +
     "    </div>\n" +
     "    <div class=\"menu-item\" id=\"sort-menu\">\n" +
-    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/bookSort.html\">\n" +
-    "            <span class=\"glyphicon glyphicon-star\"></span>&nbsp;&nbsp;&nbsp;优质车辆\n" +
+    "        <a class=\"menu-item col-xs-offset-2\" href=\"library/carSort.html\">\n" +
+    "            <span class=\"glyphicon glyphicon-star\"></span>&nbsp;&nbsp;&nbsp;热门车辆\n" +
     "        </a>\n" +
     "    </div>\n" +
     "\n" +

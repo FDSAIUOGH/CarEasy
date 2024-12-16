@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <base href="../">
+    <script type="text/javascript" src="js/loadHead.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/pagination.css"/>
+    <script type="text/javascript" src="js/pagination.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@truffle/contract@4.3.5/dist/truffle-contract.min.js"></script>
+    <script type="text/javascript" src="js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="js/messages_zh.min.js"></script>
+    <script type="text/javascript" src="app/ipfs.js"></script>
+</head>
+
+<style type="text/css">
+    .dashed_tbl {
+        width: 100%;
+        border-top: 1px dashed #333333;
+        border-left: 1px dashed #333333;
+        text-align: center;
+    }
+    .dashed_tbl td {
+        border-bottom: 1px dashed #333333;
+        border-right: 1px dashed #333333;
+    }
+    .img-cover {
+        width: 100%;
+        height: 240px;
+        object-fit: cover; /* 确保图片合适地填充容器 */
+    }
+    .img-caption {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        padding: 10px;
+        text-align: center;
+    }
+    .car-cover {
+        position: relative;
+        width: 100%;
+        height: 240px;
+        overflow: hidden;
+        border-radius: 4px;
+        margin-bottom: 15px;
+    }
+    
+    .car-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .car-cover img:hover {
+        transform: scale(1.05);
+    }
+    
+    /* 添加图片加载失败时的默认样式 */
+    .car-cover img.error {
+        object-fit: contain;
+        padding: 20px;
+        background: #f8f9fa;
+    }
+</style>
+
+<body>
+<div id="wrap">
+    <!--左侧菜单栏-->
+    <script type="text/javascript" src="js/nav.js"></script>
+
+    <!--右侧内容栏-->
+    <div id="rightContent">
+        <div role="tabpanel" class="tab-pane">
+            <!--顶部模块-->
+            <div class="check-div">
+                <div class="left-section">
+                    <a href="library/deployCar.html">
+                        <button class="btn btn-green btn-xs">我要出租车辆</button>
+                    </a>
+                </div>
+                <div class="right-section">
+                    <div class="search-container">
+                        <select class="form-control input-sm" id="car-type">
+                            <option value="">全部类型</option>
+                            <option value="小型车">小型车</option>
+                            <option value="轿车">轿车</option>
+                            <option value="跑车">跑车</option>
+                            <option value="休旅车">休旅车</option>
+                            <option value="越野车">越野车</option>
+                            <option value="皮卡车">皮卡车</option>
+                            <option value="超级跑车">超级跑车</option>
+                            <option value="特种车辆">特种车辆</option>
+                            <option value="小型货车">小型货车</option>
+                            <option value="大型货车">大型货车</option>
+                            <option value="小型客车">小型客车</option>
+                            <option value="大型客车">大型客车</option>
+                        </select>
+                        <input type="text" class="form-control input-sm" id="home-keyword" placeholder="请输入车辆名称">
+                        <button class="btn btn-search" onclick="homeSearch()">查询</button>
+                    </div>
+                </div>
+            </div>
+
+            <!--车辆列表-->
+            <div class="data-div">
+                <div class="row" id="cars">
+                    <!-- 车辆项模板 -->
+                    <div class="col-sm-6 col-md-3">
+                        <div class="thumbnail">
+                            <a href="car.html?id={id}">
+                                <div style="position: relative;">
+                                    <img class="img-cover" src="{cover}" alt="车辆图片"/>
+                                    <figcaption class="img-caption">{nameWriter}</figcaption>
+                                </div>
+                            </a>
+                            <div class="caption">
+                                <table class="dashed_tbl">
+                                    <tr>
+                                        <td>租赁次数: <samp>{rentNum}</samp></td>
+                                        <td>评分: <samp>{score}</samp></td>
+                                    </tr>
+                                </table>
+                                <span class="label label-info">类型</span>
+                                <samp>{style}</samp>
+                                <br/>
+                                <span class="label label-info">车主</span>
+                                <samp>{publisherPublishAge}</samp>
+                                <br/>
+                                <span class="label label-info">车牌号</span>
+                                <samp>{carNumber}</samp>
+                                <br/>
+                                <span class="label label-info">购车年份</span>
+                                <samp>{pages}</samp>
+                                <br/>
+                                <span class="label label-info">出租状态</span>
+                                <samp>{status}</samp>
+                                <br/>
+                                <span class="label label-info">简介</span>
+                                <samp>{intro}</samp>
+                                <br/>
+                                <div align="center">
+                                    <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modal"
+                                            onclick="App.set({id})">租赁
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--底部分页-->
+            <footer class="footer">
+                <div id="pagination"></div>
+            </footer>
+
+            <!--租赁确认弹窗-->
+            <div class="modal fade" id="modal" role="dialog" aria-labelledby="modalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="modalLabel">租赁确认</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                确定要租赁该车辆吗？
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-xs btn-default" data-dismiss="modal">取 消</button>
+                            <button type="button" class="btn btn-xs btn-danger" onclick="App.rentCar()" id="rentCarBtn">确认租赁</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="app/carHome.js"></script>
+</body>
+</html>

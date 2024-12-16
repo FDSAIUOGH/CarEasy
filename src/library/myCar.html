@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <base href="../">
+    <script type="text/javascript" src="js/loadHead.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/pagination.css"/>
+    <script type="text/javascript" src="js/jquery.raty.min.js"></script>
+    <script type="text/javascript" src="js/pagination.js"></script>
+    <script type="text/javascript" src="app/ipfs.js"></script><!--core-->
+    <!-- Web3 和 合约相关 -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@truffle/contract@4.3.5/dist/truffle-contract.min.js"></script>
+    <!-- IPFS -->
+    <script src="https://unpkg.com/ipfs-api/dist/index.min.js"></script>
+</head>
+
+<style type="text/css">
+    .error {
+        font-weight: bold;
+        padding-left: 16px;
+        color: #ff1212;
+    }
+    .img-cover {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+    }
+    .img-caption {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 10px;
+    }
+    .car-info {
+        margin: 10px 0;
+    }
+    .car-info .label {
+        margin-right: 5px;
+    }
+    .loading {
+        text-align: center;
+        padding: 20px;
+    }
+</style>
+
+<body>
+<div id="wrap">
+    <!--左侧菜单栏-->
+    <script type="text/javascript" src="js/nav.js"></script>
+
+    <!--右侧内容栏-->
+    <div id="rightContent">
+        <div role="tabpanel" class="tab-pane">
+            <!--顶部导航-->
+            <div class="check-div">
+                <div class="left-section">
+                    <button class="btn btn-primary" onclick="window.location.href='library/myCar.html?type=published'">我发布的</button>
+                    <button class="btn btn-success" onclick="window.location.href='library/myCar.html?type=rented'">我租赁的</button>
+                    <button class="btn btn-info" onclick="window.location.href='library/myCar.html?type=returned'">已归还的</button>
+                    <button class="btn btn-warning" onclick="window.location.href='library/myCar.html?type=commented'">已评价的</button>
+                </div>
+                <div class="right-section">
+                    <div class="search-container">
+                        <select class="form-control" id="carType">
+                            <option value="">全部类型</option>
+                            <option value="小型车">小型车</option>
+                            <option value="轿车">轿车</option>
+                            <option value="跑车">跑车</option>
+                            <option value="休旅车">休旅车</option>
+                            <option value="越野车">越野车</option>
+                            <option value="皮卡车">皮卡车</option>
+                            <option value="超级跑车">超级跑车</option>
+                            <option value="特种车辆">特种车辆</option>
+                            <option value="小型货车">小型货车</option>
+                            <option value="大型货车">大型货车</option>
+                            <option value="小型客车">小型客车</option>
+                            <option value="大型客车">大型客车</option>
+                        </select>
+                        <input type="text" class="form-control" placeholder="搜索车辆..." id="myCarSearchBtn">
+                        <button class="btn btn-search" onclick="keyWordSearch()">
+                            <i class="fa fa-search"></i> 搜索
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!--车辆列表-->
+            <div class="data-div">
+                <div class="row" id="Viewcars">
+                    <div class="loading">加载中...</div>
+                </div>
+            </div>
+
+            <!--底部分页-->
+            <footer class="footer">
+                <div id="pagination"></div>
+            </footer>
+
+            <!--还车模态框-->
+            <div class="modal fade" id="modal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">归还车辆</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>确认要归还这辆车吗？</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" onclick="App.returnCar()">确认归还</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="app/myCar.js"></script>
+</body>
+</html>

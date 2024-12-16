@@ -1,0 +1,48 @@
+<div class="car-item">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="car-cover">
+                <a href="car.html?id={id}">
+                    <img src="{cover}" alt="车辆图片" 
+                         onerror="this.src='images/default-car.jpg'; this.classList.add('error');">
+                </a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="car-info">
+                <h3 class="car-title">{nameWriter}</h3>
+                <div class="car-details">
+                    <table class="dashed_tbl">
+                        <tr>
+                            <td>租赁次数: <samp>{rentNum}</samp></td>
+                            <td>评分: <samp>{score}</samp></td>
+                        </tr>
+                    </table>
+                    <span class="label label-info">类型</span>
+                    <samp>{style}</samp>
+                    <br/>
+                    <span class="label label-info">车主</span>
+                    <samp>{publisherPublishAge}</samp>
+                    <br/>
+                    <span class="label label-info">车牌号</span>
+                    <samp>{carNumber}</samp>
+                    <br/>
+                    <span class="label label-info">购车年份</span>
+                    <samp>{pages}</samp>
+                    <br/>
+                    <span class="label label-info">出租状态</span>
+                    <samp>{status}</samp>
+                    <br/>
+                    <span class="label label-info">简介</span>
+                    <samp>{intro}</samp>
+                    <br/>
+                </div>
+                <div class="car-actions">
+                    <button class="btn btn-primary" onclick="App.set('{id}')" data-toggle="modal" data-target="#modal">
+                        租赁车辆
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

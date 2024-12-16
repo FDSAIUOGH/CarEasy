@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <base href="../">
+    <script type="text/javascript" src="js/loadHead.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@truffle/contract@4.3.5/dist/truffle-contract.min.js"></script>
+    <script type="text/javascript" src="js/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="js/messages_zh.min.js"></script>
+    <script src="https://unpkg.com/ipfs-http-client@30.1.3/dist/index.min.js"></script>
+    <script type="text/javascript" src="app/ipfs.js"></script>
+    <script type="text/javascript" src="app/deployCar.js"></script>
+</head>
+
+<style type="text/css">
+    .error {
+        font-weight: bold;
+        padding-left: 16px;
+        color: #ff1212;  /* 错误提示颜色改为红色 */
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .preview-image {
+        max-width: 200px;
+        margin-top: 10px;
+    }
+</style>
+
+<body>
+<div id="wrap">
+    <!--左侧菜单栏-->
+    <script type="text/javascript" src="js/nav.js"></script>
+    
+    <!--右侧内容栏-->
+    <div id="rightContent">
+        <div role="tabpanel" class="tab-pane">
+            <!--发布车辆信息表单-->
+            <div class="center-block" style="background-color: #fff;width: 600px;padding: 50px 0;margin: 50px auto;">
+                <form class="form-horizontal" id="form">
+                    <div class="form-group">
+                        <label for="nameWriter" class="col-xs-4 control-label">车辆名称: </label>
+                        <div class="col-xs-5">
+                            <input type="text" name="nameWriter" id="nameWriter" class="form-control input-sm duiqi"
+                                   placeholder="请输入车辆名称" style="margin-top: 7px;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="style" class="col-xs-4 control-label">车辆类型: </label>
+                        <div class="col-xs-5">
+                            <select name="style" id="style" class="form-control input-xs select-duiqi"
+                                    style="margin-top: 10px;">
+                                <option value="">请选择车辆类型</option>
+                                <option value="小型车">小型车</option>
+                                <option value="轿车">轿车</option>
+                                <option value="跑车">跑车</option>
+                                <option value="休旅车">休旅车</option>
+                                <option value="越野车">越野车</option>
+                                <option value="皮卡车">皮卡车</option>
+                                <option value="超级跑车">超级跑车</option>
+                                <option value="特种车辆">特种车辆</option>
+                                <option value="小型货车">小型货车</option>
+                                <option value="大型货车">大型货车</option>
+                                <option value="小型客车">小型客车</option>
+                                <option value="大型客车">大型客车</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="publisherPublishAge" class="col-xs-4 control-label">车主姓名: </label>
+                        <div class="col-xs-5">
+                            <input type="text" name="publisherPublishAge" id="publisherPublishAge" 
+                                   class="form-control input-sm duiqi" placeholder="请输入车主姓名"
+                                   style="margin-top: 7px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="carNumber" class="col-xs-4 control-label">车牌号: </label>
+                        <div class="col-xs-5">
+                            <input type="text" name="carNumber" id="carNumber" class="form-control input-sm duiqi"
+                                   placeholder="请输入车牌号" style="margin-top: 7px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pages" class="col-xs-4 control-label">购车年份: </label>
+                        <div class="col-xs-5">
+                            <input type="number" name="pages" id="pages" class="form-control input-sm duiqi"
+                                   placeholder="请输入购车年份" min="1990" max="2024" style="margin-top: 7px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status" class="col-xs-4 control-label">出租状态: </label>
+                        <div class="col-xs-5">
+                            <select name="status" id="status" class="form-control input-xs select-duiqi"
+                                    style="margin-top: 10px;">
+                                <option value="">请选择出租状态</option>
+                                <option value="未出租">未出租</option>
+                                <option value="已出租">已出租</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="intro" class="col-xs-4 control-label">车辆简介: </label>
+                        <div class="col-xs-5">
+                            <textarea rows="5" name="intro" id="intro" class="form-control input-sm duiqi"
+                                      placeholder="请输入车辆简介"></textarea>
+                            <span class="error"></span> <!-- 字数限制提示 -->
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cover" class="col-xs-4 control-label">车辆图片: </label>
+                        <div class="col-xs-5">
+                            <input type="file" name="cover" id="cover" accept="image/*">
+                            <p class="help-block">支持jpg、png、bmp格式</p>
+                            <img id="preview" class="preview-image" style="display: none;">
+                            <a id="tip_cover" target='_blank'></a>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-offset-4 col-xs-5">
+                            <button type="reset" class="btn btn-default">重置表单</button>
+                            <button type="submit" class="btn btn-primary">发布车辆</button>
+                            <span id="tip"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
