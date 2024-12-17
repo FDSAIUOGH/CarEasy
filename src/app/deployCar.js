@@ -1,4 +1,4 @@
-App = {
+const App = {
     init: async function () {
         try {
             // 连接到IPFS守护进程API服务器
@@ -165,33 +165,17 @@ App = {
             
             if (coverFile) {
                 try {
-                    // 显示上传进度
-                    $("#tip").html("正在上传图片...");
                     
-                    // 使用 FileReader 读取文件
-                    const reader = new FileReader();
-                    const fileData = await new Promise((resolve, reject) => {
-                        reader.onload = (e) => resolve(e.target.result);
-                        reader.onerror = (e) => reject(e);
-                        reader.readAsArrayBuffer(coverFile);
-                    });
-
-                    // 转换为 Uint8Array
-                    const buffer = new Uint8Array(fileData);
-                    
-                    // 上传到 IPFS
-                    const result = await ipfs.files.add([{
-                        path: coverFile.name,
-                        content: buffer
-                    }]);
-                    
-                    coverHash = `http://localhost:8080/ipfs/${result[0].hash}`;
+                    // 直接上传文件到 IPFS，无需转换为 buffer
+                    const result = await App._ipfsCarAdd(coverFile);
+                    coverHash = `http://localhost:8080/ipfs/${result}`;
                     console.log('图片已上传到 IPFS:', coverHash);
                     
-                    $("#tip_cover").html("图片上传成功").attr('href', coverHash);
+                    $("#tip_cover").html('<span style="color:green">图片上传成功</span>');
+                    $("#tip_cover").attr('href', coverHash);
                 } catch (error) {
                     console.error('图片上传失败:', error);
-                    $("#tip_cover").html("图片上传失败，将使用默认图片");
+                    $("#tip_cover").html('<span style="color:red">图片上传失败，将使用默认图片</span>');
                     coverHash = 'images/default-car.jpg';
                 }
             } else {
@@ -199,7 +183,17 @@ App = {
             }
 
             // 发布到区块链
+            $("#tip").html('<span style="color:blue">正在发布车辆信息...</span>');
             await App.handleCarPublish(formData, coverHash);
+
+            // 发布成功
+            $("#tip").html('<span style="color:green">发布成功！</span>');
+            alert("发布成功！等待区块确认...");
+            
+            // 延迟跳转
+            setTimeout(() => {
+                window.location.href = 'library/carHome.html';
+            }, 1500);
 
         } catch (error) {
             console.error("发布失败:", error);
@@ -208,27 +202,32 @@ App = {
     },
 
     handleCarPublish: async function (formData, coverUrl) {
-        const carInstance = await window.car.deployed();
-        await carInstance.publishCarInfo(
-            formData.nameWriter,
-            formData.style,
-            formData.publisherPublishAge,
-            formData.carNumber,
-            formData.intro,
-            coverUrl,
-            formData.status,
-            formData.pages,
-            {
-                from: window.currentAccount,
-                gas: 3000000
-            }
-        );
+        try {
+            const carInstance = await window.car.deployed();
+            const result = await carInstance.publishCarInfo(
+                formData.nameWriter,
+                formData.style,
+                formData.publisherPublishAge,
+                formData.carNumber,
+                formData.intro,
+                coverUrl,
+                formData.status,
+                formData.pages,
+                {
+                    from: window.currentAccount,
+                    gas: 3000000
+                }
+            );
 
-        alert("发布成功！等待区块确认...");
-        window.location.href = 'library/carHome.html';
+            console.log('发布交易成功:', result);
+            return result;
+        } catch (error) {
+            console.error('区块链交易失败:', error);
+            throw error;
+        }
     },
 
-    // 将文件添加到IPFS
+    // 修改 IPFS 上传方法
     _ipfsCarAdd: function (file) {
         return new Promise((resolve, reject) => {
             if (file.size > 5242880) {
@@ -236,25 +235,26 @@ App = {
                 return;
             }
 
-            const reader = new FileReader();
-            reader.onloadend = async function () {
-                try {
-                    // 转换为 Uint8Array
-                    const buffer = new Uint8Array(reader.result);
-                    
-                    // 上传到 IPFS
-                    const result = await ipfs.files.add([{
-                        path: file.name,
-                        content: buffer
-                    }]);
-                    
-                    resolve(result[0].hash);
-                } catch (err) {
-                    reject(new Error("IPFS上传失败: " + err.message));
+            // 创建 FormData 对象
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // 使用 fetch API 直接发送到 IPFS API
+            fetch('http://localhost:5001/api/v0/add', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result && result.Hash) {
+                    resolve(result.Hash);
+                } else {
+                    reject(new Error("IPFS上传返回格式错误"));
                 }
-            };
-            reader.onerror = () => reject(new Error("文件读取失败"));
-            reader.readAsArrayBuffer(file);
+            })
+            .catch(err => {
+                reject(new Error("IPFS上传失败: " + err.message));
+            });
         });
     }
 };

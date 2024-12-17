@@ -71,23 +71,40 @@ App = {
         
         var content = '';
         for (var i = start; i < end; i++) {
-            var result = await App._getCarInfo(i);
-            var rentNum = await App._getRentNums(i);
-            
-            var carHtml = template
-                .replace('{nameWriter}', result[1])
-                .replace('{rentNum}', rentNum)
-                .replace('{score}', result[10])
-                .replace('{style}', result[2])
-                .replace('{publisherPublishAge}', result[3])
-                .replace('{carNumber}', result[4])
-                .replace('{pages}', result[8])
-                .replace('{status}', result[7] ? '已出租' : '未出租')
-                .replace('{id}', i.toString())
-                .replace('{cover}', result[6] || 'images/default-car.jpg')
-                .replace('{intro}', result[5]);
+            try {
+                const result = await App._getCarInfo(i);
+                const rentNum = await App._getRentNums(i);
                 
-            content += carHtml;
+                // 检查车辆状态
+                const isRented = await car.deployed().then(instance => {
+                    return instance.isCarRented.call(i);
+                });
+                
+                // 根据实际状态设置显示文本和按钮
+                const status = isRented ? '已出租' : '未出租';
+                const buttonHtml = isRented 
+                    ? '<button class="btn btn-default btn-xs" disabled>已出租</button>'
+                    : `<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modal" onclick="App.set(${i})">租赁</button>`;
+                
+                var carHtml = template
+                    .replace(/{id}/g, i.toString())
+                    .replace('{nameWriter}', result[1])
+                    .replace('{rentNum}', rentNum)
+                    .replace('{score}', result[10])
+                    .replace('{style}', result[2])
+                    .replace('{publisherPublishAge}', result[3])
+                    .replace('{carNumber}', result[4])
+                    .replace('{pages}', result[8])
+                    .replace('{status}', status)
+                    .replace('{cover}', result[6] || 'images/default-car.jpg')
+                    .replace('{intro}', result[5])
+                    .replace(/<button.*租赁.*button>/, buttonHtml);  // 替换租赁按钮
+                    
+                content += carHtml;
+            } catch (error) {
+                console.error(`加载车辆 ${i} 信息失败:`, error);
+                continue;
+            }
         }
         $("#cars").append(content);
     },
@@ -103,23 +120,41 @@ App = {
         
         var content = '';
         for (var i = start; i < end; i++) {
-            var result = searchList[i][1];
-            var rentNum = await App._getRentNums(searchList[i][0]);
-            
-            var carHtml = template
-                .replace('{nameWriter}', result[1])
-                .replace('{rentNum}', rentNum)
-                .replace('{score}', result[10])
-                .replace('{style}', result[2])
-                .replace('{publisherPublishAge}', result[3])
-                .replace('{carNumber}', result[4])
-                .replace('{pages}', result[8])
-                .replace('{status}', result[7])
-                .replace('{id}', searchList[i][0].toString())
-                .replace('{cover}', result[6])
-                .replace('{intro}', result[5]);
+            try {
+                const result = searchList[i][1];
+                const carId = searchList[i][0];
+                const rentNum = await App._getRentNums(carId);
                 
-            content += carHtml;
+                // 检查车辆状态
+                const isRented = await car.deployed().then(instance => {
+                    return instance.isCarRented.call(carId);
+                });
+                
+                // 根据实际状态设置显示文本和按钮
+                const status = isRented ? '已出租' : '未出租';
+                const buttonHtml = isRented 
+                    ? '<button class="btn btn-default btn-xs" disabled>已出租</button>'
+                    : `<button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modal" onclick="App.set(${carId})">租赁</button>`;
+                
+                var carHtml = template
+                    .replace(/{id}/g, carId.toString())
+                    .replace('{nameWriter}', result[1])
+                    .replace('{rentNum}', rentNum)
+                    .replace('{score}', result[10])
+                    .replace('{style}', result[2])
+                    .replace('{publisherPublishAge}', result[3])
+                    .replace('{carNumber}', result[4])
+                    .replace('{pages}', result[8])
+                    .replace('{status}', status)
+                    .replace('{cover}', result[6])
+                    .replace('{intro}', result[5])
+                    .replace(/<button.*租赁.*button>/, buttonHtml);  // 替换租赁按钮
+                    
+                content += carHtml;
+            } catch (error) {
+                console.error(`加载搜索结果 ${i} 信息失败:`, error);
+                continue;
+            }
         }
         $("#cars").append(content);
     },
@@ -198,15 +233,23 @@ App = {
     // 设置要租赁的车辆ID
     set: function(id) {
         try {
-            // ID可能是字符串形式，需要转换
-            const carId = parseInt(id);
-            if (isNaN(carId)) {
-                throw new Error('无效的车辆ID');
+            // 确保 id 不为空
+            if (id === undefined || id === null) {
+                throw new Error('车辆ID不能为空');
             }
-            window.RentId = carId;
+            
+            // 设置全局租赁ID
+            window.RentId = parseInt(id);
+            
             // 重置按钮状态
-            $("#rentCarBtn").html('确认租赁');
-            $("#rentCarBtn").attr("disabled", false);
+            $("#rentCarBtn")
+                .prop("disabled", false)
+                .html('确认租赁')
+                .removeClass('btn-default')
+                .addClass('btn-primary');
+            
+            console.log('设置租赁ID成功:', window.RentId);
+            
         } catch (error) {
             console.error('设置租赁ID失败:', error);
             alert("设置租赁ID失败: " + error.message);
@@ -214,76 +257,87 @@ App = {
     },
 
     // 处理车辆租赁
-    rentCar: function() {
+    rentCar: async function() {
         try {
             // 检查 MetaMask
             if (typeof window.ethereum === 'undefined') {
                 throw new Error('请安装 MetaMask');
             }
 
+            // 检查租赁ID是否已设置
+            if (typeof window.RentId === 'undefined' || window.RentId === null) {
+                throw new Error('未选择要租赁的车辆');
+            }
+
+            // 禁用按钮，防止重复点击
+            $("#rentCarBtn")
+                .prop("disabled", true)
+                .html('处理中...')
+                .removeClass('btn-primary')
+                .addClass('btn-default');
+
+            // 获取当前账户
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            if (!accounts || accounts.length === 0) {
+                throw new Error('请先连接 MetaMask');
+            }
+
             // 获取合约实例
-            car.deployed().then(function(carInstance) {
-                // 检查车辆是否已出租
-                carInstance.isCarRented.call(window.RentId).then(function(result) {
-                    if (result) {
-                        $("#rentCarBtn").html('已出租');
-                        $("#rentCarBtn").attr("disabled", true);
-                        alert("该车辆已被租出");
-                        $("#modal").modal('hide');
-                    } else {
-                        // 检查是否是自己的车
-                        carInstance.isMyCar.call(window.RentId).then(function(ismycar) {
-                            if (ismycar) {
-                                $("#rentCarBtn").html('无法租赁');
-                                $("#rentCarBtn").attr("disabled", true);
-                                alert("不能租赁自己的车辆!");
-                                $("#modal").modal('hide');
-                            } else {
-                                // 获取当前账户
-                                web3.eth.getAccounts().then(function(accounts) {
-                                    if (!accounts || accounts.length === 0) {
-                                        throw new Error('请先连接 MetaMask');
-                                    }
-                                    
-                                    // 发送租赁交易
-                                    carInstance.rentCar(window.RentId, {
-                                        from: accounts[0],
-                                        gas: 3000000
-                                    }).then(function(result) {
-                                        console.log('租赁交易已发送:', result);
-                                        alert("租赁成功，等待区块确认!");
-                                        $("#modal").modal('hide');
-                                        window.location.reload();
-                                    }).catch(function(error) {
-                                        console.error('租赁失败:', error);
-                                        if (error.message.includes('User denied')) {
-                                            alert("您取消了交易");
-                                        } else {
-                                            alert("租赁失败: " + error.message);
-                                        }
-                                        $("#modal").modal('hide');
-                                    });
-                                }).catch(function(error) {
-                                    console.error('获取账户失败:', error);
-                                    alert("获取账户失败: " + error.message);
-                                });
-                            }
-                        }).catch(function(error) {
-                            console.error('检查车辆所有权失败:', error);
-                            alert("检查车辆所有权失败: " + error.message);
-                        });
-                    }
-                }).catch(function(error) {
-                    console.error('检查车辆状态失败:', error);
-                    alert("检查车辆状态失败: " + error.message);
-                });
-            }).catch(function(error) {
-                console.error('获取合约实例失败:', error);
-                alert("获取合约实例失败: " + error.message);
+            const carInstance = await car.deployed();
+
+            // 检查车辆状态
+            const carInfo = await carInstance.getCarInfo.call(window.RentId);
+            if (!carInfo) {
+                throw new Error('车辆不存在');
+            }
+
+            // 检查是否是自己的车
+            const isMyCar = await carInstance.isMyCar.call(window.RentId, { from: accounts[0] });
+            if (isMyCar) {
+                throw new Error('不能租赁自己的车辆');
+            }
+
+            // 检查车辆是否已出租
+            const isRented = await carInstance.isCarRented.call(window.RentId);
+            if (isRented) {
+                throw new Error('该车辆已被租出');
+            }
+
+            console.log('准备发送租赁交易:', {
+                carId: window.RentId,
+                from: accounts[0]
             });
+
+            // 发送租赁交易
+            const result = await carInstance.rentCar(window.RentId, {
+                from: accounts[0],
+                gas: 3000000
+            });
+
+            console.log('租赁交易结果:', result);
+            alert("租赁成功！");
+            $('#modal').modal('hide');
+            window.location.reload();
+
         } catch (error) {
-            console.error('租赁操作失败:', error);
-            alert("租赁操作失败: " + error.message);
+            console.error("租赁失败:", error);
+            
+            // 恢复按钮状态
+            $("#rentCarBtn")
+                .prop("disabled", false)
+                .html('确认租赁')
+                .removeClass('btn-default')
+                .addClass('btn-primary');
+            
+            if (error.message.includes('User denied')) {
+                alert("您取消了交易");
+            } else if (error.message.includes('revert')) {
+                // 解析智能合约的 revert 原因
+                const reason = error.message.split('revert ')[1] || '未知原因';
+                alert("租赁失败: " + reason);
+            } else {
+                alert("租赁失败，请重试: " + error.message);
+            }
         }
     }
 };

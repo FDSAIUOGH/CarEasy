@@ -122,39 +122,30 @@ App = {
                     const comment = await App._getCarCommentInfo(gid, i);
                     if (!comment || !comment[0]) continue;
 
-                    // 处理用户头像
-                    const userPic = comment[0] == ownerAddress ? "images/owner.png" : "images/buyer.png";
+                    // 评分处理
+                    const score = parseInt(comment[2].toString());
+                    const normalizedScore = Math.min(Math.max(score, 0), 10);
                     
-                    // 评分处理 - 确保是数字并限制在0-10之间
-                    const stars = parseInt(comment[1]) || 0;
-                    const normalizedStars = Math.min(Math.max(stars, 0), 10);
-                    
-                    // 地址处理
-                    const address = comment[0].toString();
-                    const shortAddr = address.substring(address.length - 6);
-                    
-                    // 时间处理
-                    const timestamp = parseInt(comment[3]);
-                    const formattedDate = timestamp ? fmtCarDate(timestamp) : '未知时间';
-                    
-                    // 内容处理
-                    const commentText = comment[2] ? comment[2].toString().trim() : '无评价内容';
+                    // 评论内容处理
+                    const commentText = comment[3] || '无评价内容';
 
                     commentsContent += `
                         <div class="comment-item">
                             <div class="comment-header">
                                 <div class="user-info">
-                                    <img src="${userPic}" alt="用户头像" style="width: 40px; height: 40px; border-radius: 50%;">
-                                    <span>***${shortAddr}</span>
+                                    <img src="images/buyer.png" alt="用户头像">
+                                    <span>用户 #${comment[0].toString()}</span>
                                 </div>
                                 <div class="rating-stars">
-                                    <span class="score-text">${normalizedStars}分: </span>
-                                    ${'★'.repeat(normalizedStars)}${'☆'.repeat(10-normalizedStars)}
+                                    <span class="score-text">${normalizedScore}分</span>
+                                    <div class="stars">
+                                        ${'<span class="star filled">★</span>'.repeat(normalizedScore)}
+                                        ${'<span class="star">☆</span>'.repeat(10-normalizedScore)}
+                                    </div>
                                 </div>
                             </div>
                             <div class="comment-content">
                                 <p>${commentText}</p>
-                                <small class="text-muted">${formattedDate}</small>
                             </div>
                         </div>`;
                 } catch (err) {
@@ -243,35 +234,20 @@ App = {
             // 获取合约实例
             const carInstance = await car.deployed();
 
-            // 发送交易前检查参数
-            console.log('评价参数:', {
-                carId: window.evaluateId,
-                score: window.evaluateScore,
-                content: content,
-                from: accounts[0]
-            });
-
             // 使用 Promise 方式调用合约
-            await new Promise((resolve, reject) => {
-                carInstance.evaluate(
-                    window.evaluateId,
-                    window.evaluateScore,
-                    content,
-                    {
-                        from: accounts[0],
-                        gas: 3000000
-                    }
-                ).then(result => {
-                    console.log('评价交易成功:', result);
-                    alert("评价成功！");
-                    hideModal();
-                    window.location.reload();
-                    resolve();
-                }).catch(error => {
-                    console.error('评价交易失败:', error);
-                    reject(error);
-                });
-            });
+            await carInstance.evaluate(
+                window.evaluateId,  // ID
+                window.evaluateScore, // 评分
+                content,  // 评价内容
+                {
+                    from: accounts[0],
+                    gas: 3000000
+                }
+            );
+
+            alert("评价成功！");
+            hideModal();
+            window.location.reload();
 
         } catch (error) {
             console.error("评价失败:", error);
@@ -282,9 +258,7 @@ App = {
             } else if (error.message.includes('MetaMask')) {
                 alert("请确保 MetaMask 已连接");
             } else {
-                // 提供更详细的错误信息
-                const errorMessage = error.message || JSON.stringify(error);
-                alert("评价失败，请重试: " + errorMessage);
+                alert("评价失败，请重试: " + error.message);
             }
             hideModal();
         }
@@ -383,7 +357,7 @@ function getQueryVariable(variable) {
 
 function fmtCarDate(timestamp) {
     try {
-        const date = new Date(parseInt(timestamp) * 1000);
+        const date = new Date(timestamp);
         if (isNaN(date.getTime())) {
             return '无效时间';
         }

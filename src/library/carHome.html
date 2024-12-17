@@ -159,7 +159,7 @@
             </footer>
 
             <!--租赁确认弹窗-->
-            <div class="modal fade" id="modal" role="dialog" aria-labelledby="modalLabel">
+            <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -174,8 +174,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-xs btn-default" data-dismiss="modal">取 消</button>
-                            <button type="button" class="btn btn-xs btn-danger" onclick="App.rentCar()" id="rentCarBtn">确认租赁</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+                            <button type="button" class="btn btn-primary" id="rentCarBtn" onclick="App.rentCar()">确认租赁</button>
                         </div>
                     </div>
                 </div>
