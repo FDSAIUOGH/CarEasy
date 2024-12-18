@@ -37,7 +37,7 @@ App = {
                 content += `
                     <div class="row">
                         <div class="col-xs-1">${i + 1}</div>
-                        <div class="col-xs-1">${carInfo[1]}</div>
+                        <div class="col-xs-1" title="${carInfo[1]}">${truncateText(carInfo[1], 4)}</div>
                         <div class="col-xs-3">${carInfo[0]}</div>
                         <div class="col-xs-1">${fmtDate(carInfo[9].toString())}</div>
                         <div class="col-xs-1">${carInfo[2]}</div>
@@ -182,6 +182,14 @@ function fmtDate(timestamp) {
         month: '2-digit',
         day: '2-digit'
     });
+}
+
+// 添加文字截断函数
+function truncateText(text, maxLength) {
+    if (text.length <= maxLength) {
+        return text;
+    }
+    return text.substring(0, maxLength) + '...';
 }
 
 // 初始化
